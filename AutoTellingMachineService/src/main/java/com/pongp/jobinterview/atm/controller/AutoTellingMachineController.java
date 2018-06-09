@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pongp.jobinterview.atm.model.BankNote;
 import com.pongp.jobinterview.atm.service.ATMService;
+import com.pongp.jobinterview.atm.service.repository.BankNotesRepository;
 
 @RestController
 @RequestMapping("/atm")
@@ -20,7 +21,7 @@ public class AutoTellingMachineController {
 
 	public static final Logger logger = LoggerFactory.getLogger(AutoTellingMachineController.class);
 
-	ATMService atmService = new ATMService();
+	ATMService atmService = new ATMService( new BankNotesRepository() );
 
 	// -------------------Retrieve Available List of Bank Notes---------------------------------------------
 	@RequestMapping(value = "/position/", method = RequestMethod.GET)
@@ -34,7 +35,7 @@ public class AutoTellingMachineController {
 
 	// -------------------Withdraw Money ------------------------------------------
 	@RequestMapping(value = "/withdraw/{amount}", method = RequestMethod.POST)
-	public ResponseEntity<?> getUser(@PathVariable("amount") long id) {
+	public ResponseEntity<?> getUser(@PathVariable("amount") int id) {
 
 		//return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
 		

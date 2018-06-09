@@ -1,22 +1,32 @@
 package com.pongp.jobinterview.atm.service;
 
+import java.util.List;
+import java.math.*;
+
+import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
+
 import java.util.ArrayList;
 import com.pongp.jobinterview.atm.model.BankNote;
+import com.pongp.jobinterview.atm.service.repository.IRepository;
+import com.pongp.jobinterview.atm.util.exception.InvalidWithdrawException;
 
 public class ATMService 
 {
-	public ArrayList<BankNote> getAvailableBankNote()
+	
+	private IRepository<BankNote> _bankNoteRepositary;
+	
+	public ATMService( IRepository<BankNote> bankNoteRepository ) 
+	{
+		_bankNoteRepositary = bankNoteRepository;
+	}
+	   
+	public List<BankNote> getAvailableBankNote( )
 	{
 		//TEMPORARILY mock simple to make sure web service is up and working
-		return  new ArrayList<BankNote>() {{
-		    add( new BankNote(50, 15));
-		    add( new BankNote(100, 15));
-		    add( new BankNote(500, 15));
-		    add( new BankNote(1000, 15));
-		}};
+		return _bankNoteRepositary.FindAll();
 	}
 	
-	public void withdrawMoney()
+	public void withdrawMoney( int amount )  throws InvalidWithdrawException
 	{
 		//will be implemented
 	}
