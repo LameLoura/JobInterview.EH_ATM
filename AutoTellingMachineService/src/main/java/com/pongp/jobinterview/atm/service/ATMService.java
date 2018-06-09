@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.pongp.jobinterview.atm.model.BankNote;
 import com.pongp.jobinterview.atm.service.repository.IRepository;
 import com.pongp.jobinterview.atm.util.exception.InvalidWithdrawException;
+import com.pongp.jobinterview.atm.util.exception.WithdrawErrorMessage;
 
 public class ATMService 
 {
@@ -28,7 +29,17 @@ public class ATMService
 	
 	public void withdrawMoney( int amount )  throws InvalidWithdrawException
 	{
-		//will be implemented
+		validateWithdrawAmount( amount );
+		
+		//TODO implement withdraw logic
+	}
+	
+	private void validateWithdrawAmount( int amount ) throws InvalidWithdrawException
+	{
+		if( amount <= 0 )
+		{
+			throw new InvalidWithdrawException( WithdrawErrorMessage.INVALID_INPUT.getErrorMessage() );
+		}
 	}
 
 }
