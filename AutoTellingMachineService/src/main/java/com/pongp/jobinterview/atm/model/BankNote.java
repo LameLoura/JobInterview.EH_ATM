@@ -1,5 +1,10 @@
 package com.pongp.jobinterview.atm.model;
 
+/**
+ * Represent a collection of bank note of the same value
+ * @author PongP
+ *
+ */
 public class BankNote 
 {
 	private final int _noteValue;
@@ -19,5 +24,15 @@ public class BankNote
 	public int getNoteCount()
 	{
 		return _noteCount;
+	}
+
+	public void increaseNoteCount()
+	{
+		_noteCount++;
+	}
+	
+	public void descreaseNoteCount()
+	{
+		_noteCount--;
 	}
 }

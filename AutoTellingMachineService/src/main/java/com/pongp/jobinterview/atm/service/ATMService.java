@@ -7,6 +7,7 @@ import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
 
 import java.util.ArrayList;
 import com.pongp.jobinterview.atm.model.BankNote;
+import com.pongp.jobinterview.atm.model.BankNoteBatch;
 import com.pongp.jobinterview.atm.service.repository.IRepository;
 import com.pongp.jobinterview.atm.util.exception.InvalidWithdrawException;
 import com.pongp.jobinterview.atm.util.exception.WithdrawErrorMessage;
@@ -27,11 +28,18 @@ public class ATMService
 		return _bankNoteRepositary.FindAll();
 	}
 	
-	public void withdrawMoney( int amount )  throws InvalidWithdrawException
+	/**
+	 * 
+	 * @param amount
+	 * @return {@link BankNoteBatch} represent how many of each note withdrawer get
+	 * @throws InvalidWithdrawException
+	 */
+	public BankNoteBatch withdrawMoney( int amount )  throws InvalidWithdrawException
 	{
 		validateWithdrawAmount( amount );
 		
 		//TODO implement withdraw logic
+		return new BankNoteBatch();
 	}
 	
 	private void validateWithdrawAmount( int amount ) throws InvalidWithdrawException
