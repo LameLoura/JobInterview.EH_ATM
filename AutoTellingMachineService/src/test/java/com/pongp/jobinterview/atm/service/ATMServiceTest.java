@@ -3,6 +3,7 @@ package com.pongp.jobinterview.atm.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -19,6 +20,7 @@ import com.pongp.jobinterview.atm.util.exception.WithdrawErrorMessage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ATMServiceTest {
+    
 	ATMService fixture;
 
 	@Mock
@@ -62,12 +64,66 @@ public class ATMServiceTest {
 	    when(bankNoteRepository.FindAll()).thenReturn(availableNotes);
 	    
 	    BankNoteBatch output = fixture.withdrawMoney(1000);
+	    
 	    // bank are unlimited. the return note should be exactly the bank that match its value
 	    assertEquals(2, output.getNoteData().get(500).getNoteCount());
 	    assertEquals(1, output.getNoteData().keySet().size());
 	}
 	
-	///////////////////////////////  private stuffs ///////////////////////////
+	@Test
+	public void test_verifyRepositoryChangesWithdraw1700_successful() throws InvalidWithdrawException
+	{
+	    int initialNote = 100;
+	    mockBankNoteAvailable( initialNote );
+	    fixture.withdrawMoney(1700);
+	    
+	    //verify that the repository acknowledge the change to database layer
+	    verifyUpdatedBankDataOnRepository( 	new BankNote( 1000, initialNote -1 )
+						,new BankNote( 500, initialNote -1 )
+						,new BankNote( 100, initialNote -2 ) );
+	    
+	}
+	
+	@Test
+	public void test_verifyRepositoryChangesWithdraw1700_unsuccessful()
+	{
+	    InvalidWithdrawException expectedException = null;
+	    int initialNote = 1;
+	    mockBankNoteAvailable( initialNote );
+    	    try
+            {
+    		fixture.withdrawMoney(1700);
+        	
+            } 
+    	    catch (InvalidWithdrawException e)
+    	    {
+		expectedException = e;
+    	    }
+	    
+	    //verify that the repository acknowledge the change to database layer
+	    verifyUpdatedBankDataOnRepository( ); //empty array : not expecting a change on data access layer
+	    assertNotNull( expectedException );
+	    
+	}
+	
+	///////////////////////////////  private stuffs -- utility for test within this class ///////////////////////////
+	private void verifyUpdatedBankDataOnRepository( BankNote... expectedBankUpdateOnRepository )
+	{
+	    //get the list of bank note that the mocked repository has actually acknowledge the changes
+	    ArgumentCaptor<BankNote> actualUpdateBankNotesOnREpository = ArgumentCaptor.forClass(BankNote.class);
+	    
+	    //verify # of times repository acknowledge changes
+	    verify( bankNoteRepository, times( expectedBankUpdateOnRepository.length )).update( actualUpdateBankNotesOnREpository.capture() );
+	    BankNoteBatch actualUpdatedBankNote = new BankNoteBatch( actualUpdateBankNotesOnREpository.getAllValues() );
+	    
+	    for( BankNote expectedChanges : expectedBankUpdateOnRepository )
+	    {
+		BankNote actualChange = actualUpdatedBankNote.getNoteData().get( expectedChanges.getValue() );
+		assertEquals( expectedChanges.getNoteCount() , actualChange.getNoteCount() );
+	    }
+
+	}
+	
         private void verifyStraightForwardWithDraw( int bankNoteValue ) throws InvalidWithdrawException
         {
 
@@ -97,17 +153,29 @@ public class ATMServiceTest {
 	}
 
 	/**
-	 * mock a lot of bank to ensure that insufficient bank is not an issue on that test case
+	 * mock a lot of bank to ensure that insufficient bank WILL NOT be an issue on that test case
 	 */
 	private void mockUnlimitedBank()
 	{
+	    mockBankNoteAvailable( 1_000_000 );
+	}
+	
+	/**
+	 * 
+	 * @param bankPerType # of bank note available for each note type
+	 */
+	@SuppressWarnings("unchecked")
+	private void mockBankNoteAvailable( int bankPerType )
+	{
+	    reset( bankNoteRepository );
+	    
 	    ArrayList<BankNote> availableNotes = new ArrayList<BankNote>() ;
-	    availableNotes.add(new BankNote(1000	, 100));
-	    availableNotes.add(new BankNote(500	, 100));
-	    availableNotes.add(new BankNote(100	, 100));
-	    availableNotes.add(new BankNote(50		, 100));
-	    availableNotes.add(new BankNote(20		, 100));
-	    // mock unlimited bank
+	    availableNotes.add(new BankNote(1000	, bankPerType));
+	    availableNotes.add(new BankNote(500	, bankPerType));
+	    availableNotes.add(new BankNote(100	, bankPerType));
+	    availableNotes.add(new BankNote(50		, bankPerType));
+	    availableNotes.add(new BankNote(20		, bankPerType));
+	    
 	    when(bankNoteRepository.FindAll()).thenReturn(availableNotes);
 	}
 }

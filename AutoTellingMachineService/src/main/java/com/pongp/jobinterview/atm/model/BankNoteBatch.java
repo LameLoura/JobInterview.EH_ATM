@@ -1,6 +1,7 @@
 package com.pongp.jobinterview.atm.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +16,14 @@ public class BankNoteBatch
 	   
 	   public BankNoteBatch()
 	   {
+	   }
+	   
+	   public BankNoteBatch( List<BankNote> noteData )
+	   {
+		   for ( BankNote note : noteData )
+		   {
+			   _noteData.put(note.getValue(), note);
+		   }
 	   }
 	   
 	   public void addNote( int noteValue )
