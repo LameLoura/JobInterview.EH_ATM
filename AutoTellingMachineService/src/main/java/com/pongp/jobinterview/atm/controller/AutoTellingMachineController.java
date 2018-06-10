@@ -25,7 +25,7 @@ public class AutoTellingMachineController {
 
 	// -------------------Retrieve Available List of Bank Notes---------------------------------------------
 	@RequestMapping(value = "/position/", method = RequestMethod.GET)
-	public ResponseEntity<List<BankNote>> listAllUsers() {
+	public ResponseEntity<List<BankNote>> getAvailableBankNote() {
 		List<BankNote> bankNotes = atmService.getAvailableBankNote();
 		if (bankNotes.isEmpty()) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -35,7 +35,7 @@ public class AutoTellingMachineController {
 
 	// -------------------Withdraw Money ------------------------------------------
 	@RequestMapping(value = "/withdraw/{amount}", method = RequestMethod.POST)
-	public ResponseEntity<?> getUser(@PathVariable("amount") int id) {
+	public ResponseEntity<?> withDraw(@PathVariable("amount") int id) {
 
 		//return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
 		

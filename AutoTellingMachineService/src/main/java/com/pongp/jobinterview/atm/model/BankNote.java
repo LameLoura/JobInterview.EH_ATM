@@ -35,4 +35,12 @@ public class BankNote
 	{
 		_noteCount--;
 	}
+	
+	//for debugging within eclipse
+	@Override
+	public String toString()
+	{
+	    String beautifulValue = String.format("%1$-" + 5 + "s",  this._noteValue );
+	    return String.format( "\tBankNote : %s \t( count = %d)", beautifulValue, this._noteCount );
+	}
 }
