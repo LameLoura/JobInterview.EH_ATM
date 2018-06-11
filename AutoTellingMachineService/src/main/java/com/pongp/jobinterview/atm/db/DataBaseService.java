@@ -2,11 +2,8 @@ package com.pongp.jobinterview.atm.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import com.pongp.jobinterview.atm.model.BankNote;
 
 public class DataBaseService
 {
@@ -44,26 +41,6 @@ public class DataBaseService
     public Connection getConnection() throws SQLException
     {
 	return DriverManager.getConnection("jdbc:hsqldb:mem:employees");
-    }
-
-    public static BankNote getFirst()
-    {
-	BankNote user = null;
-	try (Connection connection = DataBaseService.getInstance().getConnection(); Statement statement = connection.createStatement();)
-	{
-	    statement.execute("SELECT VALUE,VOLUME from banknote");
-
-	    ResultSet result = statement.executeQuery("SELECT * FROM banknote");
-	    if (result.next())
-	    {
-		user = new BankNote(result.getInt("VALUE"), result.getInt("VOLUME"));
-	    }
-	} 
-	catch (SQLException | ClassNotFoundException e)
-	{
-
-	}
-	return user;
     }
 
 }
