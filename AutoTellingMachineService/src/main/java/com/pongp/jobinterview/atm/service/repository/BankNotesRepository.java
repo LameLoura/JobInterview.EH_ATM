@@ -36,11 +36,9 @@ public class BankNotesRepository implements IRepository<BankNote>
     
     public List<BankNote> FindAll()
     {
-	 List<BankNote> bankData = new ArrayList<BankNote>();
+	List<BankNote> bankData = new ArrayList<BankNote>();
 	try (Connection connection = DataBaseService.getInstance().getConnection(); Statement statement = connection.createStatement();)
 	{
-	    statement.execute("SELECT VALUE,VOLUME from banknote");
-
 	    ResultSet result = statement.executeQuery("SELECT * FROM banknote");
 	    while (result.next())
 	    {
@@ -58,13 +56,13 @@ public class BankNotesRepository implements IRepository<BankNote>
     
     public void add(BankNote item)
     {
-	//adding/removing new type of deliberately unsupported
+	//adding/removing new type of bank note is deliberately unsupported
 	throw new UnsupportedOperationException();
     }
 
     public void remove(BankNote item)
     {
-	//adding/removing new type of deliberately unsupported
+	//adding/removing new type of bank note is deliberately unsupported
 	throw new UnsupportedOperationException();
     }
 

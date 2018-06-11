@@ -71,7 +71,7 @@ public class ATMServiceTest {
 	}
 	
 	@Test
-	public void test_verifyRepositoryChangesWithdraw1700_successful() throws InvalidWithdrawException
+	public void test_verifyRepositoryChanges_caseWithdraw1700Successful() throws InvalidWithdrawException
 	{
 	    int initialNote = 100;
 	    mockBankNoteAvailable( initialNote );
@@ -85,15 +85,15 @@ public class ATMServiceTest {
 	}
 	
 	@Test
-	public void test_verifyRepositoryChangesWithdraw1700_unsuccessful()
+	public void test_verifyRepositoryChanges_caseWithdraw1700Unsuccessful()
 	{
 	    InvalidWithdrawException expectedException = null;
+	    //mock initial note very few to test insufficient bank case
 	    int initialNote = 1;
 	    mockBankNoteAvailable( initialNote );
     	    try
             {
     		fixture.withdrawMoney(1700);
-        	
             } 
     	    catch (InvalidWithdrawException e)
     	    {
